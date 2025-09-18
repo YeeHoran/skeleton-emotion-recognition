@@ -1,0 +1,44 @@
+# General Configuration
+finetune: False
+partial_train: null
+
+# Training Parameters
+epochs: 120                # 降低训练 epoch，避免过拟合
+batch_size: 16
+lr_backbone: 0.00005       # 略微提升 backbone 学习率，加快收敛
+lr_head: 0.0002            # 提升 head 学习率，快速适配小数据集
+weight_decay: 0.02         # 稍微增大权重衰减，抑制过拟合
+lr_decay: 0.97
+clip_grad_norm: 1.0
+warmup_epochs: 5           # 缩短 warmup，避免过慢
+
+# Model Architecture
+model_version: class
+maxlen: 75
+dim_feat: 256              # 降低特征维度（384 → 256）
+mlp_ratio: 2
+depth: 3                   # 降低网络深度（5 → 3）
+dim_rep: 256               # 降低表示维度（512 → 256）
+num_heads: 4               # 减少注意力头数（6 → 4）
+att_fuse: True
+num_joints: 16
+hidden_dim: 512            # 隐藏层维度减少（768 → 512）
+dropout_ratio: 0.5         # 增大 dropout（0.5 → 0.6->0.5）
+alpha: 0.1 # cross-entropy loss和supcont loss的权重，这里alpha是supcont的权重，可以调节，比如 0.05 ~ 0.5
+temperature_major: 0.5 #imbalance major NT-lent loss temperature, dense distribute for major class samples
+temperature_minor: 0.1 #imbalance minor supercont loss temperature, increase seperability
+
+# Data Configuration
+dataset: merged_2177
+data_split: elmd
+clip_len: 75
+action_classes: 4
+use_velocity: True
+use_bone_length: True
+
+# Data Augmentation
+random_move: True
+scale_range_train: [0.8,1.2]   # 加强训练集缩放扰动
+scale_range_test: [1.0,1.0]
+rotate_aug: True
+noise_std: 0.02              # 增大噪声（0.01 → 0.02）
